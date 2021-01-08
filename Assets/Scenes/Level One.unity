@@ -293,10 +293,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 5082140045700712151, guid: aa521ec21221b5246b2560c6281863b5, type: 3}
-      propertyPath: m_LocalScale.x
-      value: 3
-      objectReference: {fileID: 0}
     - target: {fileID: 5203065674616188596, guid: aa521ec21221b5246b2560c6281863b5, type: 3}
       propertyPath: m_Name
       value: Launch Pad
