@@ -23,6 +23,19 @@ public class Rocket : MonoBehaviour
         Rotate();
     }
 
+    void OnCollisionEnter(Collision collision)
+    {
+        switch (collision.gameObject.tag)
+        {
+            case "Safe": //do nothing. Safe place to land Rocket.
+                print("Safe Landing Place!");
+                break;
+            default: //trigger Crash sequence. NOT SAFE TO LAND.
+                print("Unsafe Landing Place!");
+                break;
+        }
+    }
+
     private void Rotate()
     {
         float rotationSpeed = rcsThrust * Time.deltaTime; 
