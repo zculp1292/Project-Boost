@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Rocket : MonoBehaviour
 {
@@ -10,11 +11,15 @@ public class Rocket : MonoBehaviour
     
     Rigidbody rocketRigidBody;
     AudioSource thrustSound;
+    GameStatus gameStatus;
+
+    string rocketStatus = "Safe";
     
     void Start()
     {
         rocketRigidBody = GetComponent<Rigidbody>();
         thrustSound = GetComponent<AudioSource>();
+        gameStatus = FindObjectOfType<GameStatus>();
     }
 
     void Update()
@@ -25,14 +30,33 @@ public class Rocket : MonoBehaviour
 
     void OnCollisionEnter(Collision collision)
     {
-        switch (collision.gameObject.tag)
+        if (collision.gameObject.tag != rocketStatus)
         {
-            case "Safe": //do nothing. Safe place to land Rocket.
-                print("Safe Landing Place!");
-                break;
-            default: //trigger Crash sequence. NOT SAFE TO LAND.
-                print("Unsafe Landing Place!");
-                break;
+            switch (collision.gameObject.tag)
+            {
+                case "Safe": //do nothing. Safe place to land Rocket.
+                    print("Safe Landing Place!");
+                    rocketStatus = collision.gameObject.tag;
+                    break;
+                case "Finish":
+                    print("You Win!"); //Level Win Condition
+                    rocketStatus = collision.gameObject.tag;
+                    break;
+                case "Wall":
+                    print("You hit a Wall!! Ship taking damage!!");
+                    gameStatus.DamageShip(collision.gameObject.tag);  // todo: remove and rework once basic functionality is established
+                    rocketStatus = collision.gameObject.tag;
+                    break;
+                case "Ground":
+                    print("You hit the ground!! Ship taking damage!!");
+                    gameStatus.DamageShip(collision.gameObject.tag);  // todo: remove and rework once basic functionality is established
+                    rocketStatus = collision.gameObject.tag;
+                    break;
+                default:
+                    print("Unsafe Landing Place!");
+                    rocketStatus = "Unsafe";
+                    break;
+            }
         }
     }
 

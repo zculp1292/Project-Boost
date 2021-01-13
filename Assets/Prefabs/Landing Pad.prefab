@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 3739854567164185206}
   m_Layer: 0
   m_Name: Landing Pad
-  m_TagString: Safe
+  m_TagString: Finish
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -60,7 +60,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a0f978a7b0950d44389fc7f36474df4f, type: 2}
+  - {fileID: 2100000, guid: 06bd7573d6afb9b48bf38c33358a27db, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
