@@ -123,6 +123,7 @@ public class Rocket : MonoBehaviour
         if (hullIntegrity <= 0)
         {
             rocketFlyable = false;
+            thrustSound.Stop();
         }
     }
 }
