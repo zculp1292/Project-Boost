@@ -7,6 +7,8 @@ public class GameStatus : MonoBehaviour
 {
     [SerializeField] TextMeshProUGUI hullIntegrityText;
 
+    Rocket playerRocket;
+    
     int hullIntegrity = 100;
 
     void awake()
@@ -27,7 +29,7 @@ public class GameStatus : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        playerRocket = FindObjectOfType<Rocket>();
     }
 
     // Update is called once per frame
@@ -47,5 +49,10 @@ public class GameStatus : MonoBehaviour
                 hullIntegrity = hullIntegrity - 10;
                 break;
         }
+    }
+
+    public int HullIntegrityCheck()
+    {
+        return hullIntegrity;
     }
 }

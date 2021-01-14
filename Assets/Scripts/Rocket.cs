@@ -14,18 +14,28 @@ public class Rocket : MonoBehaviour
     GameStatus gameStatus;
 
     string rocketStatus = "Safe";
+    int hullIntegrity;
+    bool rocketFlyable = true;
     
     void Start()
     {
         rocketRigidBody = GetComponent<Rigidbody>();
         thrustSound = GetComponent<AudioSource>();
         gameStatus = FindObjectOfType<GameStatus>();
+
+        hullIntegrity = CheckHullIntegrity();
+        print(hullIntegrity);
     }
 
     void Update()
     {
-        Thrust();
-        Rotate();
+        IsRocketStillFlyable();
+        
+        if (rocketFlyable == true)
+        {
+            Thrust();
+            Rotate();
+        }
     }
 
     void OnCollisionEnter(Collision collision)
@@ -45,12 +55,18 @@ public class Rocket : MonoBehaviour
                 case "Wall":
                     print("You hit a Wall!! Ship taking damage!!");
                     gameStatus.DamageShip(collision.gameObject.tag);  // todo: remove and rework once basic functionality is established
+                    hullIntegrity = CheckHullIntegrity();
                     rocketStatus = collision.gameObject.tag;
+                    print(hullIntegrity);
+                    print(rocketFlyable);
                     break;
                 case "Ground":
                     print("You hit the ground!! Ship taking damage!!");
                     gameStatus.DamageShip(collision.gameObject.tag);  // todo: remove and rework once basic functionality is established
+                    hullIntegrity = CheckHullIntegrity();
                     rocketStatus = collision.gameObject.tag;
+                    print(hullIntegrity);
+                    print(rocketFlyable);
                     break;
                 default:
                     print("Unsafe Landing Place!");
@@ -85,6 +101,7 @@ public class Rocket : MonoBehaviour
             float verticalSpeed = accelerationThrust * Time.deltaTime;
             
             rocketRigidBody.AddRelativeForce(Vector3.up * verticalSpeed);
+            rocketStatus = "Safe";
             if (thrustSound.isPlaying == false) //prevents audio from playing on top of itself
             {
                 thrustSound.Play();
@@ -93,6 +110,19 @@ public class Rocket : MonoBehaviour
         else //stops audio when Thrust key is released
         {
             thrustSound.Stop();
+        }
+    }
+
+    private int CheckHullIntegrity()
+    {
+       return gameStatus.HullIntegrityCheck();
+    }
+
+    private void IsRocketStillFlyable()
+    {
+        if (hullIntegrity <= 0)
+        {
+            rocketFlyable = false;
         }
     }
 }
