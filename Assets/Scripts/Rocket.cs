@@ -2,18 +2,18 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class Rocket : MonoBehaviour
 {
     [SerializeField] float rcsThrust = 100f;
     [SerializeField] float accelerationThrust = 10f;
-    
+
     Rigidbody rocketRigidBody;
     AudioSource thrustSound;
     GameStatus gameStatus;
 
     string rocketStatus = "Safe";
+    string nextLevel;
     int hullIntegrity;
     bool rocketFlyable = true;
     
@@ -36,12 +36,22 @@ public class Rocket : MonoBehaviour
             Thrust();
             Rotate();
         }
+        else
+        {
+            nextLevel = "Restart";
+            gameStatus.LevelLoader(nextLevel);
+        }
     }
 
     void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.tag != rocketStatus)
         {
+            if (rocketFlyable != true)
+            {
+                return;
+            }
+            
             switch (collision.gameObject.tag)
             {
                 case "Safe": //do nothing. Safe place to land Rocket.
@@ -51,10 +61,12 @@ public class Rocket : MonoBehaviour
                 case "Finish":
                     print("You Win!"); //Level Win Condition
                     rocketStatus = collision.gameObject.tag;
+                    nextLevel = "Next";
+                    gameStatus.LevelLoader(nextLevel);
                     break;
                 case "Wall":
                     print("You hit a Wall!! Ship taking damage!!");
-                    gameStatus.DamageShip(collision.gameObject.tag);  // todo: remove and rework once basic functionality is established
+                    gameStatus.ShipStatus(collision.gameObject.tag);  // todo: remove and rework once basic functionality is established
                     hullIntegrity = CheckHullIntegrity();
                     rocketStatus = collision.gameObject.tag;
                     print(hullIntegrity);
@@ -62,7 +74,7 @@ public class Rocket : MonoBehaviour
                     break;
                 case "Ground":
                     print("You hit the ground!! Ship taking damage!!");
-                    gameStatus.DamageShip(collision.gameObject.tag);  // todo: remove and rework once basic functionality is established
+                    gameStatus.ShipStatus(collision.gameObject.tag);  // todo: remove and rework once basic functionality is established
                     hullIntegrity = CheckHullIntegrity();
                     rocketStatus = collision.gameObject.tag;
                     print(hullIntegrity);
@@ -126,4 +138,5 @@ public class Rocket : MonoBehaviour
             thrustSound.Stop();
         }
     }
+
 }
